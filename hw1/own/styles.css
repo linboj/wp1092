@@ -19,6 +19,7 @@ body, html {
     left: 38%;
     top: 6%;
     border-radius: 2%;
+    display: flex;
 }
 .pause_circle{
     background: black;
@@ -88,6 +89,7 @@ body, html {
     left: 10%;
     width: 80%;
     height: 80%;
+    animation: img_shake 1s infinite;
 }
 .toplf{
     color:white;
@@ -134,6 +136,7 @@ body, html {
     position: absolute;
     top: 85%;
     left: 10%;
+	box-shadow: 0 0 15px rgb(210, 210, 210);
 }
 .nextsong_img{
     background: url(https://i.scdn.co/image/7a02f08dce547a073a8d1cfa73b9ffd0d12f49cb);
@@ -158,6 +161,9 @@ body, html {
     top: 30%;
     left: 30%;
 }
+.next_box:hover{
+    box-shadow: 0 0 20px rgb(100, 100, 100)
+}
 .forward{
     position: absolute;
     top: 72.5%;
@@ -175,8 +181,7 @@ body, html {
     left: 0%;
 }
 .f_line{
-    background-color: rgb(210,210,210);
-    width: 4px;
+    border-right: 4px solid rgb(210,210,210);
     height: 30px;
     position: absolute;
     top: 0%;
@@ -199,8 +204,7 @@ body, html {
     left: 0%;
 }
 .b_line{
-    background-color: rgb(210,210,210);
-    width: 4px;
+    border-left: 4px solid rgb(210,210,210);
     height: 30px;
     position: absolute;
     top: 0%;
@@ -220,6 +224,7 @@ body, html {
     height: 3.5px;
     position: absolute;
     top: 30%;
+    
 }
 .play_time{
     color:rgb(210,210,210);
@@ -235,4 +240,9 @@ body, html {
 }
 .play_time:hover, .total_time:hover{
     color: black;
+}
+@keyframes img_shake{
+    30% { transform: scale(1,1); }
+    50% { transform: scale(1.05,1.05); }
+    70% { transform: scale(1,1); }
 }
