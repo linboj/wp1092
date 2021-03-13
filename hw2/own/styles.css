@@ -97,7 +97,3 @@ body {
 	border-color: transparent !important;
 	cursor: not-allowed;
 }
-
-.loading{
-	background: transparent url(./images/loading.gif) center no-repeat;
-}

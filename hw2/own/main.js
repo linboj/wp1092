@@ -44,11 +44,13 @@ function nextimage(){
 }
 
 function changeimg(url){
-
     let display=document.getElementById('display');
-    display.src=url;
+    display.src='./images/loading.gif'
+    var downloadingImage= new Image()
     let link=document.getElementById('source')
     link.href=url
     link.innerHTML=url
+    downloadingImage.onload=function(){display.src=this.src}
+    downloadingImage.src=url
 }
 
