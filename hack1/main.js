@@ -53,39 +53,17 @@ cancel_button.onclick=function(){
 
 comment_button.onclick=function(){
     count++
-    var grounp=document.getElementById('comment-group')
-    var commet=document.createElement('div')
-    commet.className='comment'
-    let img=document.createElement('img')
-    img.className='comment-img'
-    let right=document.createElement('div')
-    right.className='comment-right'
-    let blk=document.createElement('div')
-    let name=document.createElement('span')
-    name.className='comment-name'
-    name.innerText='Toby Chen'
-    let time=document.createElement('span')
-    time.className='comment-time'
-    time.innerText='現在'
-    let txt=document.createElement('p')
-    txt.className='comment-text'
-    txt.innerHTML=document.getElementById('comment-input').value
-    blk.appendChild(name)
-    blk.appendChild(time)
-    right.appendChild(blk)
-    right.appendChild(txt)
-    commet.appendChild(img)
-    commet.appendChild(right)
+    addcomment()
     document.getElementById('comment-num').innerText=count+'則留言'
 }
 
 function addcomment(){
-    count++
     var grounp=document.getElementById('comment-group')
-    var commet=document.createElement('div')
-    commet.className='comment'
+    var comment=document.createElement('div')
+    comment.className='comment'
     let img=document.createElement('img')
     img.className='comment-img'
+    img.src="images/user-icon.jpg"
     let right=document.createElement('div')
     right.className='comment-right'
     let blk=document.createElement('div')
@@ -102,6 +80,7 @@ function addcomment(){
     blk.appendChild(time)
     right.appendChild(blk)
     right.appendChild(txt)
-    commet.appendChild(img)
-    commet.appendChild(right)
+    comment.appendChild(img)
+    comment.appendChild(right)
+    grounp.appendChild(comment)
 }
