@@ -1,0 +1,56 @@
+// TODO:
+document.getElementById('comment-num').innerText='1則留言'
+
+var comment_button_group=document.getElementById('comment-button-group')
+var cancel_button=document.createElement('button')
+var comment_button=document.createElement('button')
+cancel_button.innerText='取消'
+cancel_button.id='cancel-button'
+comment_button.innerText='留言'
+comment_button.id='comment-button'
+comment_button_group.appendChild(cancel_button)
+comment_button_group.appendChild(comment_button)
+
+function setcss(select,width,height,radius,bordersize,bcolor,fcolor){
+    select.style.border=bordersize
+    select.style.borderRadius=radius
+   select.style.width=width
+    select.style.height=height
+    select.style.backgroundColor=bcolor
+    select.style.color=fcolor
+    select.style.display='none'
+}
+setcss(cancel_button,'72px','40px','2px','0px','#ffffff','#606060')
+setcss(comment_button,'72px','40px','2px','0px','#cccccc','#ffffff')
+
+
+let comment_input=document.getElementById('comment-input')
+comment_input.oninput=function(){
+    if (comment_input.value.length!=0){
+        comment_button.style.backgroundColor='#065fd4'
+    }
+    else{
+        comment_button.style.backgroundColor='#cccccc'
+    }
+}        
+
+
+comment_button.onclick=function(){
+    document.getElementById('comment-input').value=''
+    document.getElementById('comment-button').style.backgroundColor='#cccccc'
+}
+
+comment_input.onclick=function(){
+    cancel_button.style.display='block'
+    comment_button.style.display='block'
+}
+
+cancel_button.onclick=function(){
+    document.getElementById('comment-input').value=null
+    cancel_button.style.display='none'
+    comment_button.style.display='none'
+}
+
+comment_button.onclick=function(){
+
+}
