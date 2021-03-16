@@ -55,6 +55,7 @@ comment_button.onclick=function(){
     count++
     addcomment()
     document.getElementById('comment-num').innerText=count+'則留言'
+    document.getElementById('comment-input').value=''
 }
 
 function addcomment(){
