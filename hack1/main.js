@@ -52,11 +52,14 @@ cancel_button.onclick=function(){
 }
 
 comment_button.onclick=function(){
-    count++
-    addcomment()
-    document.getElementById('comment-num').innerText=count+'則留言'
-    document.getElementById('comment-input').value=''
-    document.getElementById('comment-button').style.backgroundColor='#cccccc'
+    var txt=document.getElementById('comment-input').value
+    if (txt.length!=0 && txt!=' '){
+        count++
+        addcomment()
+        document.getElementById('comment-num').innerText=count+'則留言'
+        document.getElementById('comment-input').value=''
+        document.getElementById('comment-button').style.backgroundColor='#cccccc'
+    }
 }
 
 function addcomment(){
