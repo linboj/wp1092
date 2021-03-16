@@ -56,7 +56,7 @@ comment_button.onclick=function(){
     addcomment()
     document.getElementById('comment-num').innerText=count+'則留言'
     document.getElementById('comment-input').value=''
-    document.getElementById('comment-input').style.backgroundColor='#cccccc'
+    document.getElementById('comment-button').style.backgroundColor='#cccccc'
 }
 
 function addcomment(){
