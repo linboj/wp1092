@@ -1,13 +1,17 @@
 import React from "react";
-export default ({text,idx,onclick_checkbox,onclick_x}) => (
+export default ({text,idx,onclick_checkbox,onclick_x,complete}) => (
     <li className="todo-app__item">
-        <div className="todo-app_checkbox">
-            <input id={String(idx)} onClick={onclick_checkbox}></input>
-            <label htmlFor={String(idx)} onClick={onclick_checkbox}></label>
+        <div className="todo-app__checkbox">
+            <input id={String(idx)} type='checkbox' onClick={()=>{onclick_checkbox(idx)}}></input>
+            <label htmlFor={String(idx)}></label>
         </div>
-        <h1 className="todo-app__item-detail">
+        {complete && <h1 className="todo-app__item-detail" style={{textDecoration: 'line-through', opacity: 0.5}}>
+            {text}
+        </h1>}
+        {!complete && <h1 className="todo-app__item-detail">
             {text}
         </h1>
-        <img src="./img/x.png" className='todo-app__item-x' onClick={onclick_x}></img>
+        }
+        <img src="./img/x.png" className='todo-app__item-x' onClick={()=>{onclick_x(idx)}}></img>
     </li>
 )

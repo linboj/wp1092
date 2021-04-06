@@ -1,7 +1,7 @@
 import React from "react";
-export default ({all,active,completed,clear_completed}) => (
+export default ({uncomplete,all,active,completed,clear_completed}) => (
     <footer className="todo-app__footer" id='todo-footer'>
-        <div className='todo-app__total'>{} left</div>
+        <div className='todo-app__total'>{uncomplete} left</div>
         <ul className='todo-app__view-buttons'>
             <button id='all' onClick={all}>All</button>
             <button id='active' onClick={active}>Active</button>
