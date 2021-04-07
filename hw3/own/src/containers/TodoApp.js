@@ -13,7 +13,7 @@ class TodoApp extends Component {
         if (e.key==="Enter"){
             const aItem={text:e.target.value,isComplete:false}
             const newItems=[...this.state.items,aItem]
-            this.setState({items:newItems,inputValue:'What needs to be done?',uncomplete:this.state.uncomplete+1,show:true})
+            this.setState({items:newItems,inputValue:'',uncomplete:this.state.uncomplete+1,show:true})
         }
     }
 
@@ -53,7 +53,6 @@ class TodoApp extends Component {
         }
         const newItems = oldItems.slice(0, index).concat(oldItems.slice(index + 1))
         this.setState({items: newItems})
-        
     }
 
     render() {
@@ -61,7 +60,7 @@ class TodoApp extends Component {
             <>
                 <Header text="todos" />
                 <section className='todo-app__main'>
-                    <input className='todo-app__input' onKeyPress={this.handleSubmit} onChange={this.handleChange} value={this.state.inputValue} onFocus={this.handleFocus}></input>
+                    <input className='todo-app__input' onKeyPress={this.handleSubmit} onChange={this.handleChange} value={this.state.inputValue} onFocus={this.handleFocus} onBlur={()=>this.setState({inputValue:'What needs to be done?'})}></input>
                     {this.state.show && <ul className='todo-app__list' id='todo-list'>
                         {
                             this.state.items.map((item,index)=>{
