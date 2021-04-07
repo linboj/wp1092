@@ -13,7 +13,7 @@ class TodoApp extends Component {
         if (e.key==="Enter"){
             const aItem={text:e.target.value,isComplete:false}
             const newItems=[...this.state.items,aItem]
-            this.setState({items:newItems,inputValue:'',uncomplete:this.state.uncomplete+1,show:true})
+            this.setState({items:newItems,inputValue:'',uncomplete:this.state.uncomplete+1,show:true,currentFilter:null})
         }
     }
 
@@ -64,12 +64,27 @@ class TodoApp extends Component {
                     {this.state.show && <ul className='todo-app__list' id='todo-list'>
                         {
                             this.state.items.map((item,index)=>{
+                                if (this.state.currentFilter===null){
                                 return <Item text={item.text} idx={index} onclick_checkbox={this.handleCheckbox} onclick_x={this.handleX} complete={item.isComplete}/>
-                            })
+                                }
+                                else{
+                                    if (item.isComplete===this.state.currentFilter){
+                                        return <Item text={item.text} idx={index} onclick_checkbox={this.handleCheckbox} onclick_x={this.handleX} complete={item.isComplete}/>
+                                    }
+                                    else{
+                                        return false
+                                    }
+                                }
+                        })
                         }
                     </ul>}
                 </section>
-                {this.state.show && <Footer uncomplete={this.state.uncomplete} all={()=>(console.log('pass'))} active={this.state.items.length} completed={()=>(console.log('pass'))} clear_completed={()=>(console.log('pass'))}/>}
+                {this.state.show && 
+                <Footer uncomplete={this.state.uncomplete} 
+                all={()=>this.setState({currentFilter:null})} 
+                active={()=>this.setState({currentFilter:false})} 
+                completed={()=>this.setState({currentFilter:true})} 
+                clear_completed={()=>(console.log(this.state.currentFilter))}/>}
             </>
         );
     }
