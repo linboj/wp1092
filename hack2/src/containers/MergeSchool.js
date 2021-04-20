@@ -97,6 +97,18 @@ class MergeSchool extends Component {
             if (direction === 'right') {
                 const nextBoard = this.moveRight(this.state.board);
                 this.checkAndUpdateAfterMove(nextBoard);
+            }
+            else if (direction === 'left') {
+                const nextBoard = this.moveLeft(this.state.board);
+                this.checkAndUpdateAfterMove(nextBoard);
+            }  
+            else if (direction === 'up') {
+                const nextBoard = this.moveUp(this.state.board);
+                this.checkAndUpdateAfterMove(nextBoard);
+            } 
+            else if (direction === 'down') {
+                const nextBoard = this.moveDown(this.state.board);
+                this.checkAndUpdateAfterMove(nextBoard);
             } 
             // #########################
             // # 8 Implement yourself
@@ -219,10 +231,15 @@ class MergeSchool extends Component {
     
     // Rotate the matrix counterclockwisely
     rotateCounterClockwise = (matrix) => {
+        let result = [];
+        for(let i = matrix[0].length-1; i > -1; i--) {
+            let row = matrix.map(e => e[i]).reverse();
+            result.push(row);
+        }
+        return result;
         // #########################
         // # 8 Implement yourself
         // #########################
-        return matrix;
     };
     
     // Check if it is gameover
@@ -256,6 +273,18 @@ class MergeSchool extends Component {
         event.preventDefault();
         if (event.keyCode === 39) {
             this.moveGrid("right");
+        }
+
+        else if (event.keyCode === 37) {
+            this.moveGrid("left");
+        }
+
+        else if (event.keyCode === 38) {
+            this.moveGrid("up");
+        }
+
+        else if (event.keyCode === 40) {
+            this.moveGrid("down");
         }
         // #########################
         // # 8 Implement yourself
