@@ -240,8 +240,8 @@ class MergeSchool extends Component {
     // Rotate the matrix counterclockwisely
     rotateCounterClockwise = (matrix) => {
         let result = [];
-        for(let i = matrix.length-1; i > -1; i--) {
-            let row = matrix.map(e => e[i]).reverse();
+        for(let i = 0; i < matrix[0].length; i++) {
+            let row = matrix.reverse().map(e => e[i]).reverse();
             result.push(row);
         }
         return result;
