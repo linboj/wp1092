@@ -50,6 +50,7 @@ class MergeSchool extends Component {
                      [0,0,0,0]];
         let boardset = this.putGridRandom(board, true);
         boardset = this.putGridRandom(boardset.board, true);
+        return boardset.board
         // #########################
         // # 7 Add something yourself
         // boardset.board will be the initial board, please use it directly
@@ -281,10 +282,7 @@ class MergeSchool extends Component {
     }
     setrestart=()=>{
         this.setState({
-            board:[[0,0,0,0],
-                [0,0,0,0],
-                [0,0,0,0],
-                [2,2,0,0]], // the 4*4 board
+            board:this.initializeBoard(), // the 4*4 board
             qs_ranking: 32768, // qs ranking now 
             step: 0, // step
         })
