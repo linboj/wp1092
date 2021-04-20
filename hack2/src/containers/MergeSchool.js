@@ -195,7 +195,11 @@ class MergeSchool extends Component {
         // # 8 Implement yourself
         // #########################
         let board = prevBoard;
+        board=this.rotateClockwise(board)
         let combination = 0;
+        let newres=this.moveRight(board)
+        combination=newres.combination
+        board=this.rotateCounterClockwise(newres.board)
         return {board, combination};
     }
     
@@ -205,7 +209,11 @@ class MergeSchool extends Component {
         // # 8 Implement yourself
         // #########################
         let board = prevBoard;
+        board=this.rotateCounterClockwise(board)
         let combination = 0;
+        let newres=this.moveRight(board)
+        combination=newres.combination
+        board=this.rotateClockwise(newres.board)
         return {board, combination};
     }
     
@@ -232,7 +240,7 @@ class MergeSchool extends Component {
     // Rotate the matrix counterclockwisely
     rotateCounterClockwise = (matrix) => {
         let result = [];
-        for(let i = matrix[0].length-1; i > -1; i--) {
+        for(let i = matrix.length-1; i > -1; i--) {
             let row = matrix.map(e => e[i]).reverse();
             result.push(row);
         }
