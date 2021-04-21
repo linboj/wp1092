@@ -17,7 +17,7 @@ class Spreadsheet extends React.Component{
       
         return letters.toString();
       }
-
+    
     render(){
         var name_col=[]
         for (let c=1;c<=this.props.n_col;c++){
@@ -27,16 +27,24 @@ class Spreadsheet extends React.Component{
         
         return(
             <table>
-                <thead>
+                <thead onClick={()=>this.props.setFocusPosition(null,null)}>
                     <tr>
-                        <th className='row_header'></th>
+                        <th className='topleft'></th>
                     {
-                        name_col.map(e=><th className={e}>{e}</th>)
+                        name_col.map((e,idx)=><th id={`_${idx}`}>{e}</th>)
                     }
                     </tr>
                 </thead>
                 <tbody>
-                    
+                    {
+                        this.props.data.map((e,r_idx)=>(
+                        <tr>
+                            <th id={`${r_idx}_`} onClick={()=>this.props.setFocusPosition(null,null)}>{r_idx+1}</th>
+                            {e.map((g,c_idx)=>
+                                <Cell r={r_idx} c={c_idx} setFocusPosition={this.props.setFocusPosition} n_row={this.props.n_row} updateValue={this.props.updateValue} value={g}/>
+                                )}
+                        </tr>))
+                    }
                 </tbody>
             </table>
         )

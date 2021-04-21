@@ -65,7 +65,30 @@ th {
     background-color: rgb(240,240,240);
 }
 
-.row_header {
+.topleft {
     width: 60px;
 }
 
+td {
+    width: 120px;
+    height: 30px;
+    background-color: rgb(150,150,150);
+}
+
+.cell input{
+    width: 118px;
+    height: 28px;
+    left: 2px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-style: hidden;
+}
+
+.cell input:focus{
+    background-color: rgb(240,240,240);
+}
+
+.highlight {
+    background-color: rgb(220,220,255);
+}
