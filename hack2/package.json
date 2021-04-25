@@ -15,7 +15,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "npx cypress run --spec cypress/integration/public.spec.js",
+    "test": "npx cypress run --spec cypress/integration/hack2_private.mercy.spec.js",
     "eject": "react-scripts eject",
     "cypress": "cypress open"
   },
