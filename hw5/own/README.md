@@ -2,19 +2,19 @@
 
 ## With yarn
 
-1. In the current folder ('/')
+1. Enter the project root folder ('/').
 2. run <code>yarn install</code>
 3. run <code>yarn server</code>
 4. Open other terminal
-5. In the current folder, run <code>yarn start</code>
+5. Enter the project root folder, run <code>yarn start</code>
 
 ## Without yarn
 
-1. In the current folder ('/')
+1. Enter the project root folder ('/').
 2. run <code>npm install</code>
 3. run <code>npm run server</code>
 4. Open other terminal
-5. In the current folder, run <code>npm start</code>
+5. Enter the project root folder, run <code>npm start</code>
 
 ## Note
 
