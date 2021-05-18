@@ -24,6 +24,10 @@ function StationInfo(props) {
             //     <td></td>
             //   </tr>
             // coding here ...
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
           }
         </tbody>
       </table>

@@ -69,17 +69,6 @@ function App() {
             {
               // generate options of all stations within option group
               // coding here ...
-              data[Object.keys(data)[0]].map((k)=>{
-                return (
-                <div className="station-line-container">
-                  <div id={`s-${k.station_id}`} className="station-and-name" onClick={()=>{setCurrentStationId(k.station_id)}}>
-                    <div className="station-rectangle"></div>
-                    <div className="station-name"></div>
-                </div>
-                <div id={`l-${k.station_id}`} className="line"></div>
-              </div>
-              )
-              })
             }
           </select>
 
