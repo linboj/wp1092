@@ -7,6 +7,16 @@ function StationInfo(props) {
     { label: '詢問處位置', value: 'service_counter' },
     { label: '自行車進出', value: 'enable_bicycle' }
   ]
+  let rows=()=>{
+    return (
+      labels.map((k)=>{
+        return <tr>
+          <td id={`table-${k.value}-label`}>{k.label}</td>
+          <td id={`table-${k.value}-value`}>{props.data?props.data[k.value]:''}</td>
+        </tr>
+      })
+    )
+  }
 
   return (
     <div className="station-info-container">
@@ -24,10 +34,7 @@ function StationInfo(props) {
             //     <td></td>
             //   </tr>
             // coding here ...
-            <tr>
-                <td></td>
-                <td></td>
-            </tr>
+            rows()
           }
         </tbody>
       </table>

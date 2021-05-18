@@ -35,10 +35,10 @@ function App() {
   }
 
   const calculateDistance = async () => {
-    const data_all= await instance.get('/calculateDistance',{
-      start:start_station,
-      end:end_station
-    });
+    let data_all= await instance.get('/calculateDistance',{ params: { start:start_station,end:end_station } });
+    const answer=data_all.data.distance
+    console.log(answer)
+    setDistance(answer)
     // send start and end stations to backend and get distance
     // coding here ...
   }
@@ -48,6 +48,14 @@ function App() {
   useEffect(()=>{
     getStations()
   },[])
+
+  const handleChangeStart=(e)=>{
+    setStartStation(e.target.value)
+  }
+
+  const handleChangeEnd=(e)=>{
+    setEndStation(e.target.value)
+  }
 
   if (!Object.keys(data).length) {
     return (
@@ -64,27 +72,40 @@ function App() {
         <div className="mode-selector">
           
           <span id="start-station-span">起始站</span>
-          <select id="start-select" className="start-station"> {/* you should add both onChange and value to attributes */}
+          <select id="start-select" className="start-station" onChange={handleChangeStart}> {/* you should add both onChange and value to attributes */}
             <option></option>
             {
               // generate options of all stations within option group
               // coding here ...
+              Object.keys(data).map((k)=>{
+                return <optgroup label={k}>
+                  {data[k].map((l) => {
+                    return <option id={`start-group-${l.station_id}`} value={l.station_id}>{l.station_name}</option>
+                  })}
+                </optgroup>
+              })
             }
           </select>
 
           <span id="end-station-span">終點站</span>
-          <select id="end-select" className="end-station"> {/* you should add both onChange and value to attributes */}
+          <select id="end-select" className="end-station" onChange={handleChangeEnd}> {/* you should add both onChange and value to attributes */}
             <option></option>
             {
               // generate options of all stations within option group
               // coding here ...
-              
+              Object.keys(data).map((k)=>{
+                return <optgroup label={k}>
+                  {data[k].map((l) => {
+                    return <option id={`end-group-${l.station_id}`} value={l.station_id}>{l.station_name}</option>
+                  })}
+                </optgroup>
+              })
             }
           </select>
 
           <button onClick={calculateDistance} id="search-btn">查詢距離</button>
-          <span id="answer"> {/* you should add className to attributes */}
-            {distance}
+          <span id="answer" className={distance===-1?'invalid':null}> {/* you should add className to attributes */}
+            {distance>0?distance:(distance===-2?null:'INVALID')}
           </span>
           <span id="answer-postfix">KM</span>
         </div>
@@ -92,7 +113,7 @@ function App() {
         <div className="route-graph-info-container">
           <RouteGraph route_data={data[Object.keys(data)[0]] } handleOnClick={setCurrentStationId}/> {/* you should pass data to child component with your own customized parameters */}
           <RouteGraph route_data={data[Object.keys(data)[1]]} handleOnClick={setCurrentStationId}/> {/* you should pass data to child component with your own customized parameters */}
-          <StationInfo /> {/* you should pass data to child component with your own customized parameters */}
+          <StationInfo data={station_info} /> {/* you should pass data to child component with your own customized parameters */}
         </div>
         
       </div>
