@@ -1,18 +1,25 @@
 import '../App.css';
 import {useEffect, useState} from 'react';
 import {Tabs,Input,Tag} from 'antd';
-import ChatModal from './ChatModal';
+import ChatModal from '../Components/ChatModal';
 import useChatBox from '../Hooks/useChatBox';
-import useChat from '../Hooks/useChat';
+import {useMutation } from '@apollo/react-hooks'
+import {
+    CREATE_MESSAGE_MUTATION,
+    CREATE_CHATBOX_MUTATION,
+} from '../graphql'
+import ChatBox from '../Components/ChatBox'
+
 
 const {TabPane}=Tabs;
 const ChatRoom=({me,displayStatus})=>{
     const [messageInput, setMessageInput]=useState('')
     const [modalVisible, setModalVisible] = useState(false);
-    //const [activeKey, setActiveKey] = useState("");
-    const {chatBoxes,createChatBox,removeChatBox,sendData,activeKey, setActiveKey} =useChatBox()
-    //const {status,sendMessage}=useChat()
+    const [activeKey, setActiveKey] = useState("");
+    const {chatBoxes,createChatBox,removeChatBox} =useChatBox()
 
+    const [startChat]=useMutation(CREATE_CHATBOX_MUTATION)
+    const [sendMessage]=useMutation(CREATE_MESSAGE_MUTATION)
     const addChatBox = () => { setModalVisible(true); };
 
     return(
@@ -32,27 +39,31 @@ const ChatRoom=({me,displayStatus})=>{
                     return (
                     <TabPane tab={friend} key={key} closable={true}>
                         <p>{friend}'s chatbox.</p>
-                        { chatBoxes.length===0 ?
-                            (<p style={{ color: '#ccc' }}>No messages...</p>):
-                            (activeKey===''?(null):
-                            (chatBoxes.find((chatBoxe)=>chatBoxe.key===activeKey).chatLog.map(({name,body},i)=>(
-                                name!==me?(
-                                <div className="App-message" key={i} style={{'text-align':'left','display':'inline-block;'}}>
-                                    <p style={{'float': 'left','padding':'0% 5%','text-align': 'center'}}>{name}</p>
-                                    <p style={{'background-color':'#40a9ff','whiteSpace': 'pre-wrap', 'overflowWrap': 'break-word'}}>{body}</p>
-                                </div>):
-                                (<div className="App-message" key={i} style={{'text-align':'right','display':'inline-block;'}}>
-                                    <p style={{'background-color':'#40a9ff','whiteSpace': 'pre-wrap', 'overflowWrap': 'break-word'}}>{body}</p>
-                                    <div style={{'float': 'right','padding':'0% 5%','text-align': 'center'}}>{name}</div>
-                                </div>)
-                            ))))
-                        }
+                        { !key ?
+                            (null):(<ChatBox friend={friend} me={me}/>)
+                        }   
                     </TabPane>)})}
             </Tabs>
             <ChatModal visible={modalVisible}
-                    onCreate={({name})=>{
-                        createChatBox(name,me);
-                        setModalVisible(false)
+                    onCreate={async({name})=>{
+                        await startChat({
+                            variables:{
+                                name1:me,
+                                name2:name,
+                            }
+                        })
+                        let statusCreateChatBox=createChatBox(name,me)
+                        if (!statusCreateChatBox){
+                            displayStatus({
+                                type:"error",
+                                msg:`${name}'s chat box has already opened`
+                            });
+                        }
+                        else{
+                            setActiveKey(statusCreateChatBox);
+                            setModalVisible(false)
+                        }
+                        
                     }}
                     onCancel={()=>{
                         setModalVisible(false)
@@ -88,8 +99,13 @@ const ChatRoom=({me,displayStatus})=>{
                 setMessageInput('')
                 return;
             }
-            sendData({type:'MESSAGE',data:{to:chatBoxes.filter(
-                (chatBoxe)=>chatBoxe.key===activeKey)[0]['friend'],name:me,body:messageInput}})
+            sendMessage({
+                variables:{
+                    sender: me,
+                    body: messageInput,
+                    chatBox: activeKey,
+                }                
+            })
             setMessageInput('')
         }}
         ></Input.Search>
