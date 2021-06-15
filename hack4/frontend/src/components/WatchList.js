@@ -15,7 +15,7 @@ export default function WatchList() {
         { variables: { severity:1,locationKeywords: constants.watchList} })
     console.log(data)
     console.log(data)
-    const counts = data.statsCount;
+    const counts = data;
 
     // TODO
     // use subscription
