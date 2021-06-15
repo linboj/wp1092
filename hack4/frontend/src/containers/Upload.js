@@ -13,7 +13,7 @@ export default function Upload() {
 
     return <div id="Upload">
         <div id="PeopleUploader">
-            <Uploader tag="People" mutation={() => {insertPeople()}}/>
+            <Uploader tag="People" mutation={insertPeople}/>
         </div>
     </div>;
 }
