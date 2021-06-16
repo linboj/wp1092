@@ -37,13 +37,21 @@ const ChatRoom=({me,displayStatus})=>{
                             (activeKey===''?(null):
                             (chatBoxes.find((chatBoxe)=>chatBoxe.key===activeKey).chatLog.map(({name,body},i)=>(
                                 name!==me?(
-                                <div className="App-message" key={i} style={{'text-align':'left','display':'inline-block;'}}>
-                                    <p style={{'float': 'left','padding':'0% 5%','text-align': 'center'}}>{name}</p>
-                                    <p style={{'background-color':'#40a9ff','whiteSpace': 'pre-wrap', 'overflowWrap': 'break-word'}}>{body}</p>
+                                <div className="App-message" key={i}>
+                                    <div className="bubbleWrapper">
+                                        <div className="inlineContainer">
+                                            <div className='other name'>{name}</div>
+                                            <div className="otherBubble other">{body}</div>
+                                        </div>
+                                    </div>
                                 </div>):
-                                (<div className="App-message" key={i} style={{'text-align':'right','display':'inline-block;'}}>
-                                    <p style={{'background-color':'#40a9ff','whiteSpace': 'pre-wrap', 'overflowWrap': 'break-word'}}>{body}</p>
-                                    <div style={{'float': 'right','padding':'0% 5%','text-align': 'center'}}>{name}</div>
+                                (<div className="App-message" key={i} >
+                                    <div class="bubbleWrapper">
+		                                <div class="inlineContainer own">
+			                                <div className='own name'>{name}</div>
+			                                <div class="ownBubble own">{body}</div>
+		                                </div>
+	                                </div>
                                 </div>)
                             ))))
                         }
