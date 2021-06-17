@@ -127,6 +127,7 @@ wss.on('connection', function connection(client) {
         client.sendEvent({
           type: 'CHAT',
           data: {
+            chatBoxName:chatBoxName,
             messages: chatBox.messages.map(({ sender: { name }, body }) => ({
               name,
               body,

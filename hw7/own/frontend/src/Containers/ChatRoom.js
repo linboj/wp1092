@@ -9,8 +9,8 @@ const {TabPane}=Tabs;
 const ChatRoom=({me,displayStatus})=>{
     const [messageInput, setMessageInput]=useState('')
     const [modalVisible, setModalVisible] = useState(false);
-    //const [activeKey, setActiveKey] = useState("");
-    const {chatBoxes,createChatBox,removeChatBox,sendData,activeKey, setActiveKey} =useChatBox()
+    const [activeKey, setActiveKey] = useState("");
+    const {chatBoxes,createChatBox,removeChatBox,sendData,setChatBoxes} =useChatBox()
     //const {status,sendMessage}=useChat()
 
     const addChatBox = () => { setModalVisible(true); };
@@ -59,7 +59,7 @@ const ChatRoom=({me,displayStatus})=>{
             </Tabs>
             <ChatModal visible={modalVisible}
                     onCreate={({name})=>{
-                        createChatBox(name,me);
+                        setActiveKey(createChatBox(name,me));
                         setModalVisible(false)
                     }}
                     onCancel={()=>{

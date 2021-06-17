@@ -4,7 +4,7 @@ const client = new WebSocket('ws://localhost:8080')
 
 const useChatBox=()=>{
     const [chatBoxes,setChatBoxes]=useState([]);
-    const [activeKey, setActiveKey] = useState("");
+    //const [activeKey, setActiveKey] = useState("");
 
     const sendData = async (data)=>{
         await client.send(JSON.stringify(data))}
@@ -18,9 +18,9 @@ const useChatBox=()=>{
         const chatLog=[];
         newChatBoxes.push({friend,key:newKey,chatLog});
         setChatBoxes(newChatBoxes);
-        setActiveKey(newKey)
+        //setActiveKey(newKey)
         sendData({type:'CHAT',data:{to:friend,name:me}})
-        //return newKey 
+        return newKey 
     }
     const removeChatBox = (targetKey,activeKey)=>{
         let newActiveKey=activeKey;
@@ -46,12 +46,12 @@ const useChatBox=()=>{
 
         switch(type){
           case 'CHAT':{
-              const {messages}=JSON.parse(data).data
+              const {chatBoxName,messages}=JSON.parse(data).data
               let newChatBoxes=[...chatBoxes];
               let targetIndex
               const newChatLog=[...messages];
               newChatBoxes.forEach(({key},i)=>{
-                if (key===activeKey){targetIndex=i;}})
+                if (key===chatBoxName){targetIndex=i;}})
               newChatBoxes[targetIndex].chatLog=newChatLog
               setChatBoxes(newChatBoxes);
               break;
@@ -72,12 +72,12 @@ const useChatBox=()=>{
         }
 
         case 'SWITCH':{
-            const {messages}=JSON.parse(data).data
+            const {chatBoxName,messages}=JSON.parse(data).data
             let newChatBoxes=[...chatBoxes];
             let targetIndex
             const newChatLog=[...messages];
             newChatBoxes.forEach(({key},i)=>{
-                if (key===activeKey){targetIndex=i;}})
+                if (key===chatBoxName){targetIndex=i;}})
             newChatBoxes[targetIndex].chatLog=newChatLog
             setChatBoxes(newChatBoxes);
             break;
@@ -85,6 +85,6 @@ const useChatBox=()=>{
         }
     }
 
-    return {chatBoxes,createChatBox,removeChatBox,sendData,activeKey, setActiveKey}
+    return {chatBoxes,createChatBox,removeChatBox,sendData,setChatBoxes}
 }
 export default useChatBox;
