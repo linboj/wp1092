@@ -31,7 +31,7 @@ function App() {
     if (signedIn){
       localStorage.setItem(LOCALSTORAGE_KEY,me)
     }
-  },{signedIn})
+  },[signedIn,me])
 
   return (
     <div className="App">

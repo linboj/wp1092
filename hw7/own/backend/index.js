@@ -68,6 +68,14 @@ const validateChatBox = async (name, participants) => {
     .execPopulate();
 };
 
+const getChatBox = async (name) => {
+  let box = await ChatBoxModel.findOne({ name });
+  return box
+    .populate('users')
+    .populate({ path: 'messages', populate: 'sender' })
+    .execPopulate();
+};
+
 // (async () => {
 //   const a = await validateUser('a');
 //   const b = await validateUser('b');
@@ -116,7 +124,6 @@ wss.on('connection', function connection(client) {
         client.box = chatBoxName;
         if (!chatBoxes[chatBoxName]) chatBoxes[chatBoxName] = new Set(); // make new record for chatbox
         chatBoxes[chatBoxName].add(client); // add this open connection into chat box
-
         client.sendEvent({
           type: 'CHAT',
           data: {
@@ -146,11 +153,11 @@ wss.on('connection', function connection(client) {
 
         chatBox.messages.push(newMessage);
         await chatBox.save();
-
         chatBoxes[chatBoxName].forEach((client) => {
           client.sendEvent({
             type: 'MESSAGE',
             data: {
+              chatBoxName:chatBoxName,
               message: {
                 name,
                 body,
@@ -158,6 +165,31 @@ wss.on('connection', function connection(client) {
             },
           });
         });
+      }
+      case "SWITCH":{
+        const {
+          data: { chatBoxName },
+        } = message;
+        const chatBox = await getChatBox(chatBoxName);
+        // if client was in a chat box, remove that.
+        if (chatBoxes[client.box])
+          // user was in another chat box
+          chatBoxes[client.box].delete(client);
+        
+        client.box = chatBoxName;
+        if (!chatBoxes[chatBoxName]) chatBoxes[chatBoxName] = new Set(); // make new record for chatbox
+        chatBoxes[chatBoxName].add(client);
+        client.sendEvent({
+          type: 'SWITCH',
+          data: {
+            chatBoxName:chatBoxName,
+            messages: chatBox.messages.map(({ sender: { name }, body }) => ({
+              name,
+              body,
+            })),
+          },
+        });
+
       }
     }
 

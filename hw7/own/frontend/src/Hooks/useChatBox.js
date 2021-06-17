@@ -58,16 +58,29 @@ const useChatBox=()=>{
           }
 
           case 'MESSAGE':{
-              const {message}=JSON.parse(data).data
+              const {message,chatBoxName}=JSON.parse(data).data
               let newChatBoxes=[...chatBoxes];
               let targetIndex
               newChatBoxes.forEach(({key},i)=>{
-                if (key===activeKey){targetIndex=i;}})
+                if (key===chatBoxName){targetIndex=i;}})
+              if (targetIndex===undefined){break;}
               const newChatLog=newChatBoxes[targetIndex].chatLog;
               newChatLog.push(message)
               newChatBoxes[targetIndex].chatLog=newChatLog
               setChatBoxes(newChatBoxes);
               break;
+        }
+
+        case 'SWITCH':{
+            const {messages}=JSON.parse(data).data
+            let newChatBoxes=[...chatBoxes];
+            let targetIndex
+            const newChatLog=[...messages];
+            newChatBoxes.forEach(({key},i)=>{
+                if (key===activeKey){targetIndex=i;}})
+            newChatBoxes[targetIndex].chatLog=newChatLog
+            setChatBoxes(newChatBoxes);
+            break;
         }
         }
     }

@@ -1,5 +1,5 @@
 import '../App.css';
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {Tabs,Input,Tag} from 'antd';
 import ChatModal from './ChatModal';
 import useChatBox from '../Hooks/useChatBox';
@@ -23,7 +23,7 @@ const ChatRoom=({me,displayStatus})=>{
         <div className='App-messages'>
             <Tabs type='editable-card'
             activeKey={activeKey}
-            onChange={(key)=>{setActiveKey(key)}}
+            onChange={(key)=>{setActiveKey(key);sendData({type:'SWITCH',data:{chatBoxName:key}})}}
             onEdit={(targetKey,action)=>{
                 if (action==='add') addChatBox()
                 else if (action==='remove') setActiveKey(removeChatBox(targetKey,activeKey))
@@ -46,10 +46,10 @@ const ChatRoom=({me,displayStatus})=>{
                                     </div>
                                 </div>):
                                 (<div className="App-message" key={i} >
-                                    <div class="bubbleWrapper">
-		                                <div class="inlineContainer own">
+                                    <div className="bubbleWrapper">
+		                                <div className="inlineContainer own">
 			                                <div className='own name'>{name}</div>
-			                                <div class="ownBubble own">{body}</div>
+			                                <div className="ownBubble own">{body}</div>
 		                                </div>
 	                                </div>
                                 </div>)
