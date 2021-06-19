@@ -13,8 +13,7 @@
 4. In "/" folder, run <code> yarn server</code>
 5. Open other terminal and run <code>yarn start</code> in "/" folder
 
-
-## 進階要求完成
+## 已完成之進階要求
 
 - Cover各種錯誤操作，並給予適當的提⽰訊息
 
@@ -23,3 +22,5 @@
   - 創建 ChatBox 時沒有輸入對話者名字，或者是與對話者之 ChatBox 已開啟 (i.e. 不可重複開啟同⼀個 ChatBox)
 
 - 處理輸入過長時 “Line Wrapping” 的問題
+
+- 重新登入時會⾃動顯⽰上次對話時尚未關閉的ChatBox

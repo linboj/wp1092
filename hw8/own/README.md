@@ -13,7 +13,7 @@
 4. In "/" folder, run <code> yarn server</code>
 5. Open other terminal and run <code>yarn start</code> in "/" folder
 
-## 進階要求完成
+## 已完成之進階要求
 
 - Cover各種錯誤操作，並給予適當的提⽰訊息
 

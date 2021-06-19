@@ -1,5 +1,5 @@
 import '../App.css';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Tabs,Input,Tag} from 'antd';
 import ChatModal from './ChatModal';
 import useChatBox from '../Hooks/useChatBox';
@@ -15,6 +15,10 @@ const ChatRoom=({me,displayStatus})=>{
 
     const addChatBox = () => { setModalVisible(true); };
 
+    useEffect(()=>{
+        sendData({type:'INIT',data:{me}})
+    },[])
+
     return(
         <>
         <div className='App-title'>
@@ -26,35 +30,11 @@ const ChatRoom=({me,displayStatus})=>{
             onChange={(key)=>{setActiveKey(key);sendData({type:'SWITCH',data:{chatBoxName:key}})}}
             onEdit={(targetKey,action)=>{
                 if (action==='add') addChatBox()
-                else if (action==='remove') setActiveKey(removeChatBox(targetKey,activeKey))
+                else if (action==='remove') setActiveKey(removeChatBox(targetKey,activeKey,me))
             }}>
                 {chatBoxes.map(({friend,key,chatLog})=>{
                     return (
                     <TabPane tab={friend} key={key} closable={true}>
-                        <p>{friend}'s chatbox.</p>
-                        { chatBoxes.length===0 ?
-                            (<p style={{ color: '#ccc' }}>No messages...</p>):
-                            (activeKey===''?(null):
-                            (chatBoxes.find((chatBoxe)=>chatBoxe.key===activeKey).chatLog.map(({name,body},i)=>(
-                                name!==me?(
-                                <div className="App-message" key={i}>
-                                    <div className="bubbleWrapper">
-                                        <div className="inlineContainer">
-                                            <div className='other name'>{name}</div>
-                                            <div className="otherBubble other">{body}</div>
-                                        </div>
-                                    </div>
-                                </div>):
-                                (<div className="App-message" key={i} >
-                                    <div className="bubbleWrapper">
-		                                <div className="inlineContainer own">
-			                                <div className='own name'>{name}</div>
-			                                <div className="ownBubble own">{body}</div>
-		                                </div>
-	                                </div>
-                                </div>)
-                            ))))
-                        }
                     </TabPane>)})}
             </Tabs>
             <ChatModal visible={modalVisible}
@@ -65,6 +45,28 @@ const ChatRoom=({me,displayStatus})=>{
                     onCancel={()=>{
                         setModalVisible(false)
                     }}/>
+                    <div className="App-message" >
+            { chatBoxes.length===0 ?
+                            (<p style={{ color: '#ccc' }}>No messages...</p>):
+                            (activeKey===''?(null):
+                            (chatBoxes.find((chatBox)=>chatBox.key===activeKey).chatLog.map(({name,body},i)=>(
+                                name!==me?(
+                                    <div className="bubbleWrapper" key={i}>
+                                        <div className="inlineContainer">
+                                            <div className='other name'>{name}</div>
+                                            <div className="otherBubble other">{body}</div>
+                                        </div>
+                                    </div>):
+                                (<div className="bubbleWrapper" key={i}>
+		                                <div className="inlineContainer own">
+			                                <div className='own name'>{name}</div>
+			                                <div className="ownBubble own">{body}</div>
+		                                </div>
+	                                </div>
+                                )
+                            ))))
+                        }
+                        </div>
             
         </div>
         <Input.Search 

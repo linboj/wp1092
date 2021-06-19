@@ -21,27 +21,33 @@ const ChatBox=({friend,me})=>{
     },[subscribeToMore])
     //if (!loading) return <p>Loading ...</p>;
     return(
-        <>
+        <div className="App-message">
             {!data?(<p>Loading ...</p>):
             (data.chatBox.messages.length===0 ?
                 (<p style={{ color: '#ccc' }}>No messages...</p>):
                 (data.chatBox.messages.map(({sender,body},i)=>{
                     if(sender.name!==me){
                         return (
-                        <p className="App-message" key={i} style={{'text-align':'left'}}>
-                            <Tag color='#40a9ff'>{sender.name}</Tag> {body}
-                        </p>)
+                            <div className="bubbleWrapper" key={i}>
+                                <div className="inlineContainer">
+                                    <div className='other name'>{sender.name}</div>
+                                    <div className="otherBubble other">{body}</div>
+                                </div>
+                            </div>)
                     }
                     else{
                         return (
-                        <p className="App-message" key={i} style={{'text-align':'right'}}>
-                            {body} <Tag color='#40a9ff'>{sender.name}</Tag>
-                        </p>)
+                            <div className="bubbleWrapper" key={i}>
+                                <div className="inlineContainer own">
+                                    <div className='own name'>{sender.name}</div>
+                                    <div className="ownBubble own">{body}</div>
+                                </div>
+                            </div>)
                     }
                 })
                 )
             )}
-        </>
+        </div>
     )
 }
 

@@ -22,13 +22,13 @@ const useChatBox=()=>{
         sendData({type:'CHAT',data:{to:friend,name:me}})
         return newKey 
     }
-    const removeChatBox = (targetKey,activeKey)=>{
+    const removeChatBox = (targetKey,activeKey,me)=>{
         let newActiveKey=activeKey;
         let lastIndex;
         chatBoxes.forEach(({key},i)=>{
             if (key===targetKey){lastIndex=i-1;}})
         const newChatBoxes=chatBoxes.filter(
-            (chatBoxe)=>chatBoxe.key!==targetKey)
+            (chatBox)=>chatBox.key!==targetKey)
         if (newChatBoxes.length){
             if (newActiveKey===targetKey){
                 if (lastIndex>=0){
@@ -37,6 +37,7 @@ const useChatBox=()=>{
             }
         }else newActiveKey='';
         setChatBoxes(newChatBoxes)
+        sendData({type:"REMOVE",data:{chatBoxName:targetKey,me}})
         return newActiveKey
     }
 
@@ -80,6 +81,17 @@ const useChatBox=()=>{
                 if (key===chatBoxName){targetIndex=i;}})
             newChatBoxes[targetIndex].chatLog=newChatLog
             setChatBoxes(newChatBoxes);
+            break;
+        }
+
+        case "INIT":{
+            const {me,chatBoxes}=JSON.parse(data).data
+            const newChatBoxes=[]
+            chatBoxes.forEach((chatBox)=>{
+                let name = chatBox.users[0].name===me? chatBox.users[1].name:chatBox.users[0].name
+                newChatBoxes.push({friend:name,key:chatBox.name,chatLog:chatBox.messages});
+            })
+            setChatBoxes(newChatBoxes)
             break;
         }
         }

@@ -16,7 +16,8 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema({
   name: { type: String, required: true },
-  chatBoxes: [{ type: mongoose.Types.ObjectId, ref: 'ChatBox' }],
+  chatBoxes:[{type:String}],
+  //chatBoxes: [{ type: mongoose.Types.ObjectId, ref: 'ChatBox' }],
 });
 
 const messageSchema = new Schema({
@@ -120,6 +121,9 @@ wss.on('connection', function connection(client) {
           // user was in another chat box
           chatBoxes[client.box].delete(client);
 
+          sender.chatBoxes.push(chatBoxName);
+          await sender.save();
+
         // use set to avoid duplicates
         client.box = chatBoxName;
         if (!chatBoxes[chatBoxName]) chatBoxes[chatBoxName] = new Set(); // make new record for chatbox
@@ -190,7 +194,27 @@ wss.on('connection', function connection(client) {
             })),
           },
         });
-
+      }
+      case 'INIT':{
+        const {data: { me },} = message;
+        const user= await UserModel.findOne({name:me})
+        let chatBoxes
+        if (user.chatBoxes.length===0) {chatBoxes=[]}
+        else  chatBoxes = await Promise.all(user.chatBoxes.map((box)=> getChatBox(box)), )
+        client.sendEvent({
+          type: 'INIT',
+          data: {
+            me:me,
+            chatBoxes: chatBoxes
+            }
+        });
+      }
+      case 'REMOVE':{
+        const {data: { me,chatBoxName },} = message;
+        let existing = await UserModel.findOne({ name:me })
+        let newChatBoxes=existing.chatBoxes.filter((name)=>name!==chatBoxName)
+        existing.chatBoxes=newChatBoxes
+        await existing.save();
       }
     }
 

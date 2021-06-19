@@ -38,7 +38,6 @@ const ChatRoom=({me,displayStatus})=>{
                 {chatBoxes.map(({friend,key,chatLog})=>{
                     return (
                     <TabPane tab={friend} key={key} closable={true}>
-                        <p>{friend}'s chatbox.</p>
                         { !key ?
                             (null):(<ChatBox friend={friend} me={me}/>)
                         }   
