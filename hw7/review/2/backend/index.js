@@ -8,8 +8,6 @@ const uuid = require('uuid');
 const mongo = require('./mongo');
 
 const app = express();
-require('dotenv-defaults').config();//////
-
 
 /* -------------------------------------------------------------------------- */
 /*                               MONGOOSE MODELS                              */
@@ -17,13 +15,12 @@ require('dotenv-defaults').config();//////
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
-  name: { type: String, required: true },
-  chatBoxes: [{ type: mongoose.Types.ObjectId, ref: 'ChatBox' }],
+  name: { type: String, required: true }
 });
 
 const messageSchema = new Schema({
-  chatBox: { type: mongoose.Types.ObjectId, ref: 'ChatBox' },
   sender: { type: mongoose.Types.ObjectId, ref: 'User' },
+  receiver: { type: mongoose.Types.ObjectId, ref: 'User' },
   body: { type: String, required: true },
 });
 
@@ -66,7 +63,7 @@ const validateChatBox = async (name, participants) => {
   if (!box) box = await new ChatBoxModel({ name, users: participants }).save();
   return box
     .populate('users')
-    .populate({ path: 'messages', populate: 'sender' })
+    .populate({ path: 'messages', populate: ['sender', 'receiver']})
     .execPopulate();
 };
 
@@ -108,7 +105,6 @@ wss.on('connection', function connection(client) {
         const sender = await validateUser(name);
         const receiver = await validateUser(to);
         const chatBox = await validateChatBox(chatBoxName, [sender, receiver]);
-
         // if client was in a chat box, remove that.
         if (chatBoxes[client.box])
           // user was in another chat box
@@ -119,12 +115,12 @@ wss.on('connection', function connection(client) {
         if (!chatBoxes[chatBoxName]) chatBoxes[chatBoxName] = new Set(); // make new record for chatbox
         chatBoxes[chatBoxName].add(client); // add this open connection into chat box
 
-        console.log("send chat")
         client.sendEvent({
           type: 'CHAT',
           data: {
-            messages: chatBox.messages.map(({ sender: { name }, body }) => ({
+            messages: chatBox.messages.map(({ sender: { name }, receiver: to, body }) => ({
               name,
+              to,
               body,
             })),
           },
@@ -137,28 +133,23 @@ wss.on('connection', function connection(client) {
         const {
           data: { name, to, body },
         } = message;
-
         const chatBoxName = makeName(name, to);
 
         const sender = await validateUser(name);
         const receiver = await validateUser(to);
         const chatBox = await validateChatBox(chatBoxName, [sender, receiver]);
 
-        const newMessage = new MessageModel({ sender, body });
+        const newMessage = new MessageModel({ sender, receiver, body });
         await newMessage.save();
 
         chatBox.messages.push(newMessage);
         await chatBox.save();
 
-        console.log("send messages")
         chatBoxes[chatBoxName].forEach((client) => {
           client.sendEvent({
             type: 'MESSAGE',
             data: {
-              message: {
-                name,
-                body,
-              },
+              message: {name,to,body}
             },
           });
         });
@@ -166,10 +157,8 @@ wss.on('connection', function connection(client) {
     }
 
     // disconnected
-    //console.log("chatBoxes[client.box] =",chatBoxes[client.box])
     client.once('close', () => {
-      if(chatBoxes[client.box])
-        chatBoxes[client.box].delete(client);
+      chatBoxes[client.box].delete(client);
     });
   });
 });
